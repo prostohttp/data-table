@@ -7,10 +7,26 @@
   body {
     @apply bg-light text-dark font-inter text-[14px];
   }
+  button,
+  a {
+    @apply transition-all duration-300;
+  }
 }
 
 @layer components {
+  .label {
+    @apply text-[12px] font-medium  py-[2px] pr-[10px] pl-[10px] rounded-[10px] relative inline-flex items-center gap-[5px] w-fit;
+  }
+  .label__circle {
+    @apply w-[6px] h-[6px] rounded-full;
+  }
+  .is-transitioned {
+    @apply transition-all duration-300;
+  }
 }
 
 @layer utilities {
+  .active-item {
+    @apply border-l-[5px] border-l-[#6d5bd0] pl-[15px];
+  }
 }

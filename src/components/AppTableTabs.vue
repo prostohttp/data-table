@@ -1,22 +1,15 @@
 <script setup>
 import AppTabTitle from "@/components/AppTableTitle.vue";
-import { ref } from "vue";
 import { useTableStore } from "@/stores/table";
+import { useFilterStore } from "@/stores/filter";
+import { paidList } from "~/mock-ui";
 
 // Stores
 const tableStore = useTableStore();
+const filterStore = useFilterStore();
 // Const
-const { titles } = defineProps({
-  titles: {
-    type: Array,
-    required: true,
-  },
-});
-const activeTab = ref(0);
 // Handlers
-const clickHandler = (index) => {
-  activeTab.value = index;
-};
+
 // Hooks
 </script>
 
@@ -24,11 +17,13 @@ const clickHandler = (index) => {
   <div class="tabs border-b border-b-violet-3 flex justify-between mb-[20px]">
     <ul class="tab-title flex gap-[20px]">
       <app-tab-title
-        v-for="(title, index) in titles"
-        :key="title.id"
+        v-for="(title, index) in paidList"
         :title="{ label: title.label, index }"
-        @click-handler="clickHandler"
-        :class="{ 'text-dark border-b-2 border-dark': activeTab === index }"
+        @click="filterStore.setPaidStatus(index)"
+        :class="{
+          'text-dark border-b-2 border-dark':
+            filterStore.paidStatus === title.label,
+        }"
       >
         {{ title.label }}
       </app-tab-title>
@@ -36,9 +31,11 @@ const clickHandler = (index) => {
     <div class="amount">
       Total payable amount:
       <strong class="font-bold text-violet text-[18px]">
-        ${{ tableStore.amount }}
+        {{ tableStore.amountInter }}
       </strong>
-      <span class="text-[18px]"> USD</span>
+      <span class="text-[18px] uppercase">
+        {{ " " + tableStore.currency }}
+      </span>
     </div>
   </div>
 </template>
