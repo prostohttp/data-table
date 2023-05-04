@@ -13,6 +13,7 @@ export const useTableStore = defineStore("table", () => {
   //Vars
   const allSelected = ref(false);
   const items = ref(data);
+  const defaultSortItems = ref(data);
   const currency = ref("USD");
   const triggerAll = ref(false);
   const triggerPaid = ref(false);
@@ -116,10 +117,12 @@ export const useTableStore = defineStore("table", () => {
     });
   };
   // Hooks
+
   return {
     currency,
     amountInter,
     items,
+    defaultSortItems,
     setItems,
     deleteOneItem,
     deleteManyItems,

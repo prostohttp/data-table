@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { computed, onMounted, ref } from "vue";
+import { computed, ref } from "vue";
 import { useFilterStore } from "@/stores/filter";
 import { sortedByList } from "~/mock-ui";
 
@@ -16,19 +16,19 @@ export const useSortStore = defineStore("sort", () => {
     if (sortedByStatus.value === sortedByList.default) {
       return filterStore.filteredItems;
     } else if (sortedByStatus.value === sortedByList.firstName) {
-      return filterStore.filteredItems.sort((a, b) =>
+      return [...filterStore.filteredItems].sort((a, b) =>
         a["first name"].localeCompare(b["first name"])
       );
     } else if (sortedByStatus.value === sortedByList.lastName) {
-      return filterStore.filteredItems.sort((a, b) =>
+      return [...filterStore.filteredItems].sort((a, b) =>
         a["last name"].localeCompare(b["last name"])
       );
     } else if (sortedByStatus.value === sortedByList.dueDate) {
-      return filterStore.filteredItems.sort(
+      return [...filterStore.filteredItems].sort(
         (a, b) => new Date(b["date"]).getTime() - new Date(a["date"]).getTime()
       );
     } else if (sortedByStatus.value === sortedByList.lastLogin) {
-      return filterStore.filteredItems.sort(
+      return [...filterStore.filteredItems].sort(
         (a, b) =>
           new Date(b["date login"]).getTime() -
           new Date(a["date login"]).getTime()
@@ -36,7 +36,6 @@ export const useSortStore = defineStore("sort", () => {
     }
   });
   // Hooks
-  onMounted(() => {});
   return {
     sortedByStatus,
     setSortedByStatus,
