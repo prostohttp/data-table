@@ -1,44 +1,20 @@
-export const paidList = [
-  {
-    label: "All",
-  },
-  {
-    label: "Paid",
-  },
-  {
-    label: "Unpaid",
-  },
-  {
-    label: "Overdue",
-  },
-];
+export const paidList = {
+  all: "All",
+  paid: "Paid",
+  unpaid: "Unpaid",
+  overdue: "Overdue",
+};
 
-export const sortedByList = [
-  {
-    label: "Default",
-  },
-  {
-    label: "First Name",
-  },
-  {
-    label: "Last Name",
-  },
-  {
-    label: "Due Date",
-  },
-  {
-    label: "Last Login",
-  },
-];
+export const sortedByList = {
+  default: "Default",
+  firstName: "First Name",
+  lastName: "Last Name",
+  dueDate: "Due Date",
+  lastLogin: "Last Login",
+};
 
-export const usersList = [
-  {
-    label: "All",
-  },
-  {
-    label: "Active",
-  },
-  {
-    label: "Inactive",
-  },
-];
+export const usersList = {
+  all: "All",
+  active: "Active",
+  inactive: "Inactive",
+};

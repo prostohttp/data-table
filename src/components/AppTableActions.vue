@@ -4,9 +4,11 @@ import { onClickOutside } from "@vueuse/core";
 import AppSearch from "@/components/AppSearch.vue";
 import AppFilter from "@/components/AppFilter.vue";
 import AppButton from "@/components/AppButton.vue";
+import { useTableStore } from "@/stores/table";
+import { paidList } from "~/mock-ui";
 
 // Stores
-
+const tableStore = useTableStore();
 // Const
 const isOpenFilter = ref(false);
 const filter = ref(null);
@@ -42,6 +44,7 @@ onClickOutside(filter, () => {
       <div class="buttons">
         <AppButton
           class="text-[16px] font-semibold text-white bg-violet rounded-[6px] h-[40px] uppercase flex items-center text-center p-[10px] hover:bg-dark"
+          @click="tableStore.setPaymentStatus(paidList.paid)"
         >
           Pay Dues
         </AppButton>

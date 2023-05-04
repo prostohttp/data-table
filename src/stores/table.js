@@ -1,38 +1,138 @@
 import { defineStore } from "pinia";
-import { computed, ref, watch } from "vue";
+import { computed, ref } from "vue";
+import { useFilterStore } from "@/stores/filter";
 import { currencyInter } from "@/helpers/functions";
 import data from "~/mock-data.json";
+import { paidList } from "~/mock-ui";
+import { useSortStore } from "@/stores/sort";
 
 export const useTableStore = defineStore("table", () => {
+  // Stores
+  const filterStore = useFilterStore();
+  const sortStore = useSortStore();
   //Vars
-  const initialItems = ref(data);
-  const items = ref(data);
   const allSelected = ref(false);
+  const items = ref(data);
   const currency = ref("USD");
+  const triggerAll = ref(false);
+  const triggerPaid = ref(false);
+  const triggerUnpaid = ref(false);
+  const triggerOverdue = ref(false);
+  const isEmptyList = ref(false);
   //Handlers
   const amount = computed(() => {
     return items.value.reduce((accumulator, item) => {
-      return accumulator + +item.amount;
+      return (
+        accumulator +
+        (item["payment status"] === paidList.paid ? +item.amount : 0)
+      );
     }, 0);
   });
   const amountInter = computed(() => {
     return currencyInter(amount.value, "en", currency.value);
   });
-
-  // Hooks
-  watch(allSelected, () => {
-    if (allSelected.value) {
-      items.value = items.value.map((item) => ({ ...item, selected: true }));
-    } else {
-      items.value = items.value.map((item) => ({ ...item, selected: false }));
-    }
+  const setItems = (newItems) => {
+    items.value = newItems;
+  };
+  const deleteOneItem = (id) => {
+    setItems(items.value.filter((item) => item.id !== id));
+  };
+  const deleteManyItems = () => {
+    setItems(items.value.filter((item) => !item.selected));
+  };
+  const setUserStatus = (status) => {
+    items.value = items.value.map((item) => {
+      if (item.selected) {
+        return {
+          ...item,
+          "user status": status,
+        };
+      }
+      return item;
+    });
+  };
+  const setPaymentStatus = (status) => {
+    items.value = items.value.map((item) => {
+      if (item.selected) {
+        return {
+          ...item,
+          "payment status": status,
+        };
+      }
+      return item;
+    });
+  };
+  const checkIsEmptyList = computed(() => {
+    isEmptyList.value = !sortStore.sortedAndFilteredItems.length;
   });
-  // Returns
+  const setTrigger = (bool) => {
+    if (filterStore.paidStatus === paidList.all) {
+      triggerAll.value = bool;
+      triggerPaid.value = bool;
+      triggerUnpaid.value = bool;
+      triggerOverdue.value = bool;
+    } else if (filterStore.paidStatus === paidList.paid) {
+      triggerPaid.value = bool;
+    } else if (filterStore.paidStatus === paidList.unpaid) {
+      triggerUnpaid.value = bool;
+    } else if (filterStore.paidStatus === paidList.overdue) {
+      triggerOverdue.value = bool;
+    }
+  };
+  const setSelectedByPaidStatus = () => {
+    setTrigger(true);
+    items.value = items.value.map((item) => {
+      if (item["payment status"] === filterStore.paidStatus) {
+        return {
+          ...item,
+          selected: true,
+        };
+      } else if (filterStore.paidStatus === paidList.all) {
+        return {
+          ...item,
+          selected: true,
+        };
+      } else {
+        return item;
+      }
+    });
+  };
+  const setUnselectedByPaidStatus = () => {
+    setTrigger(false);
+    items.value = items.value.map((item) => {
+      if (item["payment status"] === filterStore.paidStatus) {
+        return {
+          ...item,
+          selected: false,
+        };
+      } else if (filterStore.paidStatus === paidList.all) {
+        return {
+          ...item,
+          selected: false,
+        };
+      } else {
+        return item;
+      }
+    });
+  };
+  // Hooks
   return {
     currency,
     amountInter,
-    initialItems,
     items,
+    setItems,
+    deleteOneItem,
+    deleteManyItems,
+    setUserStatus,
+    setPaymentStatus,
+    setSelectedByPaidStatus,
+    setUnselectedByPaidStatus,
     allSelected,
+    triggerUnpaid,
+    triggerPaid,
+    triggerOverdue,
+    triggerAll,
+    isEmptyList,
+    checkIsEmptyList,
   };
 });

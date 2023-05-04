@@ -1,6 +1,7 @@
 <script setup>
 import { toRef } from "vue";
 import { useFilterStore } from "@/stores/filter";
+import { useSortStore } from "@/stores/sort";
 import { sortedByList, usersList } from "~/mock-ui";
 import IconFilter from "~/icons/IconFilter.vue";
 import IconActiveLabel from "~/icons/IconActiveLabel.vue";
@@ -8,6 +9,7 @@ import IconInactiveLabel from "~/icons/IconInactiveLabel.vue";
 
 // Stores
 const filterStore = useFilterStore();
+const sortStore = useSortStore();
 // Const
 const props = defineProps({
   isOpen: {
@@ -44,12 +46,12 @@ const emit = defineEmits(["open-filter"]);
           Sort by:
         </h3>
         <button
-          v-for="sort in sortedByList"
+          v-for="sort in Object.values(sortedByList)"
           class="flex justify-between py-[5px] my-[5px] w-full hover:bg-light px-[10px] rounded-[4px] items-center"
-          @click="filterStore.setSortedByStatus(sort.label)"
+          @click="sortStore.setSortedByStatus(sort)"
         >
-          <span>{{ sort.label }}</span>
-          <IconActiveLabel v-if="filterStore.sortedByStatus === sort.label" />
+          <span>{{ sort }}</span>
+          <IconActiveLabel v-if="sortStore.sortedByStatus === sort" />
           <IconInactiveLabel v-else />
         </button>
       </div>
@@ -60,12 +62,12 @@ const emit = defineEmits(["open-filter"]);
           Users:
         </h3>
         <button
-          v-for="user in usersList"
+          v-for="user in Object.values(usersList)"
           class="flex justify-between py-[5px] my-[5px] w-full hover:bg-light px-[10px] rounded-[4px] items-center"
-          @click="filterStore.setUsersStatus(user.label)"
+          @click="filterStore.setUsersStatus(user)"
         >
-          <span>{{ user.label }}</span>
-          <IconActiveLabel v-if="filterStore.usersStatus === user.label" />
+          <span>{{ user }}</span>
+          <IconActiveLabel v-if="filterStore.usersStatus === user" />
           <IconInactiveLabel v-else />
         </button>
       </div>

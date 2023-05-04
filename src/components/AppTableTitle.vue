@@ -4,7 +4,7 @@
 // Const
 const { title } = defineProps({
   title: {
-    type: Object,
+    type: String,
     required: true,
   },
 });
@@ -16,9 +16,9 @@ const emit = defineEmits(["click-handler"]);
 
 <template>
   <li
-    @click="emit('click-handler', title.index)"
+    @click="emit('click-handler', title)"
     class="text-violet-1 font-medium pb-[10px] px-[10px] cursor-pointer"
   >
-    {{ title.label }}
+    {{ title }}
   </li>
 </template>

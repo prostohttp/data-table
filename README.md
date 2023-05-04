@@ -1,7 +1,5 @@
 # Data Table
-
-This template should help get you started developing with Vue 3 in Vite.
-
+Vite, Vue 3, Tailwind, Pinia, Vue Router
 ## Link
 https://data-table-vue3.netlify.app/
 ## Project Setup

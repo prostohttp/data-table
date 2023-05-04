@@ -23,6 +23,7 @@ module.exports = {
         table: "0px 0px 5px rgba(0, 0, 0, 0.2)",
         dropdown: "0px 0px 3px #6D5BD0;",
         filter: "0px 5px 8px rgba(0, 0, 0, 0.2);",
+        tooltip: "0px 3px 5px rgba(0, 0, 0, 0.15)",
       },
       backgroundImage: {
         iconSearch: "url('~/icons/IconSearch.svg')",

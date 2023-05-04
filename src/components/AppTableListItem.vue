@@ -10,6 +10,7 @@ import IconBottom from "~/icons/IconBottom.vue";
 import IconUp from "~/icons/IconUp.vue";
 import { currencyInter } from "@/helpers/functions";
 import { useTableStore } from "@/stores/table";
+import { usersList } from "~/mock-ui";
 
 // Stores
 const tableStore = useTableStore();
@@ -21,6 +22,7 @@ const props = defineProps({
     required: true,
   },
 });
+const emit = defineEmits(["delete-item"]);
 toRef(props, "item");
 const isOpen = ref(false);
 const isOpenDetails = ref(false);
@@ -35,8 +37,8 @@ onClickOutside(more, () => {
 
 <template>
   <div
-    class="bg-white flex px-[20px] h-[61px] items-center justify-between border-b border-b-border last-of-type:border-none"
-    :class="{ 'active-item': item.selected }"
+    class="flex px-[20px] h-[61px] items-center justify-between border-b border-b-border"
+    :class="{ 'active-item': item.selected, 'bg-violet-bg': isOpenDetails }"
   >
     <div class="flex basis-1/12 gap-[20px] items-center">
       <IconActiveCheckbox
@@ -44,8 +46,12 @@ onClickOutside(more, () => {
         @click="item.selected = !item.selected"
       />
       <IconInactiveCheckbox v-else @click="item.selected = !item.selected" />
-      <IconUp v-if="isOpenDetails" class="cursor-pointer" />
-      <IconBottom v-else class="cursor-pointer" />
+      <IconUp
+        v-if="isOpenDetails"
+        class="cursor-pointer"
+        @click="isOpenDetails = false"
+      />
+      <IconBottom v-else class="cursor-pointer" @click="isOpenDetails = true" />
     </div>
     <div class="flex basis-3/12 flex-col">
       <strong class="font-medium">
@@ -102,11 +108,21 @@ onClickOutside(more, () => {
             View Profile
           </li>
           <li
-            class="cursor-pointer p-[5px] hover:bg-light text-green rounded-[4px] mt-[5px] mb-[10px]"
+            v-if="item['user status'] === usersList.active"
+            @click="item['user status'] = usersList.inactive"
+            class="cursor-pointer p-[5px] hover:bg-light text-violet-1 rounded-[4px] mt-[5px] mb-[10px]"
           >
-            Activate Users
+            Deactivate User
           </li>
           <li
+            v-else
+            @click="item['user status'] = usersList.active"
+            class="cursor-pointer p-[5px] hover:bg-light text-green rounded-[4px] mt-[5px] mb-[10px]"
+          >
+            Activate User
+          </li>
+          <li
+            @click="emit('delete-item', item.id)"
             class="cursor-pointer p-[5px] hover:bg-light rounded-[4px] py-[5px] relative before:absolute before:-top-[5px] before:h-[1px] before:w-full before:bg-light mb-[5px] text-red"
           >
             Delete
@@ -115,7 +131,7 @@ onClickOutside(more, () => {
       </AppMoreWindow>
     </div>
   </div>
-  <div class="sub-items">
+  <div class="sub-items" v-if="isOpenDetails">
     <slot />
   </div>
 </template>
