@@ -4,12 +4,12 @@ import { useFilterStore } from "@/stores/filter";
 import { currencyInter } from "@/helpers/functions";
 import data from "~/mock-data.json";
 import { paidList } from "~/mock-ui";
-import { useSortStore } from "@/stores/sort";
+import { useSearchStore } from "@/stores/search";
 
 export const useTableStore = defineStore("table", () => {
   // Stores
   const filterStore = useFilterStore();
-  const sortStore = useSortStore();
+  const searchStore = useSearchStore();
   //Vars
   const allSelected = ref(false);
   const items = ref(data);
@@ -64,7 +64,7 @@ export const useTableStore = defineStore("table", () => {
     });
   };
   const checkIsEmptyList = computed(() => {
-    isEmptyList.value = !sortStore.sortedAndFilteredItems.length;
+    isEmptyList.value = !searchStore.searchFilteredSortedItems.length;
   });
   const setTrigger = (bool) => {
     if (filterStore.paidStatus === paidList.all) {
@@ -84,17 +84,42 @@ export const useTableStore = defineStore("table", () => {
     setTrigger(true);
     items.value = items.value.map((item) => {
       if (item["payment status"] === filterStore.paidStatus) {
-        return {
-          ...item,
-          selected: true,
-        };
+        if (
+          searchStore.searchFilteredSortedItems.some(
+            (search) => item.id === search.id
+          )
+        ) {
+          return {
+            ...item,
+            selected: true,
+          };
+        } else {
+          return {
+            ...item,
+            selected: false,
+          };
+        }
       } else if (filterStore.paidStatus === paidList.all) {
+        if (
+          searchStore.searchFilteredSortedItems.some(
+            (search) => item.id === search.id
+          )
+        ) {
+          return {
+            ...item,
+            selected: true,
+          };
+        } else {
+          return {
+            ...item,
+            selected: false,
+          };
+        }
+      } else {
         return {
           ...item,
-          selected: true,
+          selected: false,
         };
-      } else {
-        return item;
       }
     });
   };
@@ -102,17 +127,32 @@ export const useTableStore = defineStore("table", () => {
     setTrigger(false);
     items.value = items.value.map((item) => {
       if (item["payment status"] === filterStore.paidStatus) {
-        return {
-          ...item,
-          selected: false,
-        };
+        if (
+          searchStore.searchFilteredSortedItems.some(
+            (search) => item.id === search.id
+          )
+        ) {
+          return {
+            ...item,
+            selected: false,
+          };
+        }
       } else if (filterStore.paidStatus === paidList.all) {
+        if (
+          searchStore.searchFilteredSortedItems.some(
+            (search) => item.id === search.id
+          )
+        ) {
+          return {
+            ...item,
+            selected: false,
+          };
+        }
+      } else {
         return {
           ...item,
           selected: false,
         };
-      } else {
-        return item;
       }
     });
   };

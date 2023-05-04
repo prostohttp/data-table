@@ -3,10 +3,12 @@ import { useTableStore } from "@/stores/table";
 import AppTableListItem from "@/components/AppTableListItem.vue";
 import AppTableSubList from "@/components/AppTableSubList.vue";
 import { useSortStore } from "@/stores/sort";
+import { useSearchStore } from "@/stores/search";
 
 // Stores
 const tableStore = useTableStore();
 const sortStore = useSortStore();
+const searchStore = useSearchStore();
 // Const
 // Handlers
 const deleteItem = (id) => {
@@ -20,9 +22,9 @@ const deleteItem = (id) => {
 
 <template>
   <div class="flex flex-col">
-    <template v-if="sortStore.sortedAndFilteredItems.length">
+    <template v-if="searchStore.searchFilteredSortedItems.length">
       <AppTableListItem
-        v-for="item in sortStore.sortedAndFilteredItems"
+        v-for="item in searchStore.searchFilteredSortedItems"
         :item="item"
         :key="item.id"
         @delete-item="deleteItem"
