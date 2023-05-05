@@ -4,12 +4,12 @@ import { useFilterStore } from "@/stores/filter";
 import { currencyInter } from "@/helpers/functions";
 import data from "~/mock-data.json";
 import { paidList } from "~/mock-ui";
-import { useSearchStore } from "@/stores/search";
+import { usePaginationStore } from "@/stores/pagination";
 
 export const useTableStore = defineStore("table", () => {
   // Stores
   const filterStore = useFilterStore();
-  const searchStore = useSearchStore();
+  const paginationStore = usePaginationStore();
   //Vars
   const allSelected = ref(false);
   const items = ref(data);
@@ -64,7 +64,7 @@ export const useTableStore = defineStore("table", () => {
     });
   };
   const checkIsEmptyList = computed(() => {
-    isEmptyList.value = !searchStore.searchFilteredSortedItems.length;
+    isEmptyList.value = !paginationStore.itemsPerPage.length;
   });
   const setTrigger = (bool) => {
     if (filterStore.paidStatus === paidList.all) {
@@ -85,9 +85,7 @@ export const useTableStore = defineStore("table", () => {
     items.value = items.value.map((item) => {
       if (item["payment status"] === filterStore.paidStatus) {
         if (
-          searchStore.searchFilteredSortedItems.some(
-            (search) => item.id === search.id
-          )
+          paginationStore.itemsPerPage.some((search) => item.id === search.id)
         ) {
           return {
             ...item,
@@ -101,9 +99,7 @@ export const useTableStore = defineStore("table", () => {
         }
       } else if (filterStore.paidStatus === paidList.all) {
         if (
-          searchStore.searchFilteredSortedItems.some(
-            (search) => item.id === search.id
-          )
+          paginationStore.itemsPerPage.some((search) => item.id === search.id)
         ) {
           return {
             ...item,
@@ -128,10 +124,13 @@ export const useTableStore = defineStore("table", () => {
     items.value = items.value.map((item) => {
       if (item["payment status"] === filterStore.paidStatus) {
         if (
-          searchStore.searchFilteredSortedItems.some(
-            (search) => item.id === search.id
-          )
+          paginationStore.itemsPerPage.some((search) => item.id === search.id)
         ) {
+          return {
+            ...item,
+            selected: false,
+          };
+        } else {
           return {
             ...item,
             selected: false,
@@ -139,10 +138,13 @@ export const useTableStore = defineStore("table", () => {
         }
       } else if (filterStore.paidStatus === paidList.all) {
         if (
-          searchStore.searchFilteredSortedItems.some(
-            (search) => item.id === search.id
-          )
+          paginationStore.itemsPerPage.some((search) => item.id === search.id)
         ) {
+          return {
+            ...item,
+            selected: false,
+          };
+        } else {
           return {
             ...item,
             selected: false,

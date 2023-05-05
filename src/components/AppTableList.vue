@@ -2,13 +2,13 @@
 import { useTableStore } from "@/stores/table";
 import AppTableListItem from "@/components/AppTableListItem.vue";
 import AppTableSubList from "@/components/AppTableSubList.vue";
-import { useSortStore } from "@/stores/sort";
 import { useSearchStore } from "@/stores/search";
+import { usePaginationStore } from "@/stores/pagination";
 
 // Stores
 const tableStore = useTableStore();
-const sortStore = useSortStore();
 const searchStore = useSearchStore();
+const paginationStore = usePaginationStore();
 // Const
 // Handlers
 const deleteItem = (id) => {
@@ -22,9 +22,9 @@ const deleteItem = (id) => {
 
 <template>
   <div class="flex flex-col">
-    <template v-if="searchStore.searchFilteredSortedItems.length">
+    <template v-if="paginationStore.itemsPerPage.length">
       <AppTableListItem
-        v-for="item in searchStore.searchFilteredSortedItems"
+        v-for="item in paginationStore.itemsPerPage"
         :item="item"
         :key="item.id"
         @delete-item="deleteItem"
