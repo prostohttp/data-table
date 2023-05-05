@@ -158,6 +158,9 @@ export const useTableStore = defineStore("table", () => {
       }
     });
   };
+  const editListItem = (item) => {
+    console.log(item);
+  };
   // Hooks
 
   return {
@@ -179,5 +182,6 @@ export const useTableStore = defineStore("table", () => {
     triggerAll,
     isEmptyList,
     checkIsEmptyList,
+    editListItem,
   };
 });

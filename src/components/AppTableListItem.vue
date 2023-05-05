@@ -99,6 +99,7 @@ onClickOutside(more, () => {
         <ul>
           <li
             class="cursor-pointer p-[5px] hover:bg-light rounded-[4px] my-[5px]"
+            @click="tableStore.editListItem(item)"
           >
             Edit
           </li>

@@ -2,10 +2,12 @@ import { defineStore } from "pinia";
 import { computed, ref, watch } from "vue";
 import { paidList, usersList } from "~/mock-ui";
 import { useTableStore } from "@/stores/table";
+import { usePaginationStore } from "@/stores/pagination";
 
 export const useFilterStore = defineStore("filter", () => {
   // Stores
   const tableStore = useTableStore();
+  const paginationStore = usePaginationStore();
   // Const
   const usersStatus = ref(usersList.all);
   const paidStatus = ref(paidList.all);
@@ -14,6 +16,7 @@ export const useFilterStore = defineStore("filter", () => {
   // Handlers
   const setPaidStatus = (value) => {
     paidStatus.value = value;
+    paginationStore.page = 1;
   };
   const setUsersStatus = (label) => {
     usersStatus.value = label;
