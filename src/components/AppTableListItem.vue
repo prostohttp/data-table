@@ -1,8 +1,9 @@
 <script setup>
-import { ref, toRef } from "vue";
+import { ref, toRef, watch } from "vue";
 import { onClickOutside } from "@vueuse/core";
 import AppMoreWindow from "@/components/AppMoreWindow.vue";
 import AppStatusBadged from "@/components/AppStatusBadged.vue";
+import AppModal from "@/components/AppModal.vue";
 import IconMore from "~/icons/IconMore.vue";
 import IconActiveCheckbox from "~/icons/IconActiveCheckbox.vue";
 import IconInactiveCheckbox from "~/icons/IconInactiveCheckbox.vue";
@@ -25,6 +26,7 @@ const props = defineProps({
 const emit = defineEmits(["delete-item"]);
 toRef(props, "item");
 const isOpen = ref(false);
+const isOpenEditModal = ref(false);
 const isOpenDetails = ref(false);
 // Handlers
 onClickOutside(more, () => {
@@ -32,7 +34,18 @@ onClickOutside(more, () => {
     isOpen.value = false;
   }
 });
+const editItem = () => {
+  isOpenEditModal.value = true;
+  isOpen.value = false;
+};
 // Hooks
+watch(isOpenEditModal, () => {
+  if (isOpenEditModal.value) {
+    document.body.classList.add("overflow-hidden");
+  } else {
+    document.body.classList.remove("overflow-hidden");
+  }
+});
 </script>
 
 <template>
@@ -69,7 +82,9 @@ onClickOutside(more, () => {
     </div>
     <div class="flex flex-col gap-[5px] basis-2/12">
       <AppStatusBadged :label="item['payment status']" />
-      <span class="text-[12px]">Paid on {{ item["date"] }}</span>
+      <span class="text-[12px]"
+        >{{ item["payment status"] }} on {{ item["date"] }}</span
+      >
     </div>
     <div class="flex flex-col gap-[5px] basis-1/12 items-end">
       <strong class="font-medium">
@@ -99,7 +114,7 @@ onClickOutside(more, () => {
         <ul>
           <li
             class="cursor-pointer p-[5px] hover:bg-light rounded-[4px] my-[5px]"
-            @click="tableStore.editListItem(item)"
+            @click="editItem"
           >
             Edit
           </li>
@@ -132,6 +147,13 @@ onClickOutside(more, () => {
       </AppMoreWindow>
     </div>
   </div>
+  <teleport to="body">
+    <AppModal
+      v-if="isOpenEditModal"
+      @close-modal="isOpenEditModal = false"
+      :item="item"
+    />
+  </teleport>
   <div class="sub-items" v-if="isOpenDetails">
     <slot />
   </div>

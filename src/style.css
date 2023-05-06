@@ -23,6 +23,9 @@
   .is-transitioned {
     @apply transition-all duration-300;
   }
+  .app-edit {
+    @apply rounded-[8px] border border-violet-3;
+  }
 }
 
 @layer utilities {

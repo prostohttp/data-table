@@ -158,8 +158,12 @@ export const useTableStore = defineStore("table", () => {
       }
     });
   };
-  const editListItem = (item) => {
-    console.log(item);
+  const editItemData = (id, data) => {
+    const element = items.value.find((elem) => elem.id === id);
+    if (data.firstName) element["first name"] = data.firstName;
+    if (data.lastName) element["last name"] = data.lastName;
+    if (data.email) element["email"] = data.email;
+    if (data.amount) element["amount"] = data.amount;
   };
   // Hooks
 
@@ -182,6 +186,6 @@ export const useTableStore = defineStore("table", () => {
     triggerAll,
     isEmptyList,
     checkIsEmptyList,
-    editListItem,
+    editItemData,
   };
 });
