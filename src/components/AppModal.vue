@@ -33,11 +33,11 @@ const editData = (id, data) => {
 <template>
   <div
     ref="backDrop"
-    class="backdrop w-full h-full bg-violet absolute top-0 left-0 z-[10] opacity-90"
+    class="backdrop w-full h-full bg-violet fixed top-0 left-0 bottom-0 right-0 z-[10] opacity-90"
     @click="emit('close-modal')"
   ></div>
   <div
-    class="modal absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] rounded-[8px] p-[40px] pt-[20px] z-50 bg-white"
+    class="modal fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] rounded-[8px] p-[40px] pt-[20px] z-50 bg-white"
   >
     <IconClose
       class="absolute -top-[10px] -right-[10px] bg-white rounded-full w-[30px] h-[30px] p-[7px] shadow-tooltip cursor-pointer"
